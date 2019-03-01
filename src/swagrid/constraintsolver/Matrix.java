@@ -6,7 +6,7 @@ package swagrid.constraintsolver;
  * Provides functionality for solving a set of simultaneous equations.
  * Not intended for use in public API.
  * 
- * @author Alec
+ * @author Alec Dorrington
  */
 class Matrix {
 	
