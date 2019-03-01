@@ -75,8 +75,18 @@ public class Constraint {
 	 * @param var the variable to be removed.
 	 * @return this constraint instance.
 	 */
-	public Constraint removeVariable(Variable var) {
+	public Constraint removeVar(Variable var) {
 		terms.remove(var);
+		return this;
+	}
+	
+	/**
+	 * @param sum the value to which the variables in this constraint are required to sum.
+	 * @return this constraint instance.
+	 */
+	public Constraint setSum(double sum) {
+		this.sum = sum;
+		if(solver.isAutoSolveEnabled()) solver.solve();
 		return this;
 	}
 	
@@ -100,16 +110,6 @@ public class Constraint {
 	 */
 	public boolean containsVariable(Variable var) {
 		return Math.abs(getCoefficient(var)) > TOLERANCE;
-	}
-	
-	/**
-	 * @param sum the value to which the variables in this constraint are required to sum.
-	 * @return this constraint instance.
-	 */
-	public Constraint setSum(double sum) {
-		this.sum = sum;
-		if(solver.isAutoSolveEnabled()) solver.solve();
-		return this;
 	}
 	
 	/**
