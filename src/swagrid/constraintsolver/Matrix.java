@@ -35,12 +35,10 @@ class Matrix {
 	 * each row were an augmented-matrix-style equation.
 	 * Converts this matrix to reduced row echelon form in the process.
 	 * Values are returned in an order consistent with the columns of the matrix.
+	 * The matrix should in reduced row echelon form before this is called.
 	 * @return an array of solutions to the variables in this matrix.
 	 */
 	double[] solve() {
-		
-		//Convert the matrix to reduced row echelon form.
-		rref();
 		
 		//Array of variables for which to solve.
 		double[] vars = new double[width];
@@ -48,8 +46,8 @@ class Matrix {
 		//For each row in the matrix, starting at the bottom.
 		for(int row = height - 1; row >= 0; row--) {
 			
-			//Skip rows with a 0 in the final column.
-			if(matrix[width - 1][row] == 0.0) continue;
+			//Skip rows that consist only of zeroes.
+			if(allZeroes(row)) continue;
 			
 			//Determine the index of the leading value in this row.
 			int leadColumn = 0;
@@ -71,10 +69,46 @@ class Matrix {
 	}
 	
 	/**
+	 * Determines if there are no possible solutions due to over-constraining.
+	 * The matrix should be in reduced row echelon form first.
+	 * @return whether the matrix is over-constrained.
+	 */
+	boolean isOverConstrained() {
+		
+		//Check each row for an impossible equation.
+		for(int row = 0; row < height; row++) {
+			
+			//The matrix is over-constrained if there exists
+			//a row will zeroes in all but the last column.
+			if(Math.abs(matrix[width - 1][row]) > TOLERANCE && allZeroes(row)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Determines whether there are multiple solutions due to under-constraining.
+	 * The matrix should be in reduced row echelon form first.
+	 * @return whether the matrix is under-constrained.
+	 */
+	boolean isUnderConstrained() {
+		
+		//Count the number of equations.
+		int equations = 0;
+		for(int row = 0; row < height; row++) {
+			
+			if(!allZeroes(row)) equations++;
+		}
+		//The matrix is under-constrained if there are less equations than variables.
+		return equations < width - 1;
+	}
+	
+	/**
 	 * Converts this matrix to reduced row echelon form.
 	 * Modifies the existing matrix.
 	 */
-	private void rref() {
+	void rref() {
 		
 		/* Iterate over each column, looking for a non-zero value below the current leadRow in each.
 		 * Should such a value be found, swap its row with the current leadRow, modify all subsequent
@@ -182,5 +216,21 @@ class Matrix {
 		for(int column = width - 1; column >= leadColumn; column--) {
 			matrix[column][row] /= matrix[leadColumn][row];
 		}
+	}
+	
+	/**
+	 * Determines if a row contains only zeroes,
+	 * except for the last column, which can be anything.
+	 * @param row the row to check.
+	 * @return whether the row contains only zeroes.
+	 */
+	private boolean allZeroes(int row) {
+		
+		boolean allZero = true;
+		//For each value in the row, check if it is zero.
+		for(int column = 0; column < width - 1; column++) {
+			allZero &= Math.abs(matrix[column][row]) < TOLERANCE;
+		}
+		return allZero;
 	}
 }

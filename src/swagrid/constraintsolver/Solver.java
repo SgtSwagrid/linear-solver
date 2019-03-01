@@ -21,6 +21,9 @@ public class Solver {
 	/** Whether auto-solve is enabled. */
 	private boolean autoSolve = true;
 	
+	/** Whether the solver being over-constrained throws an exception. */
+	private boolean errorOnOverConstrained = true;
+	
 	/**
 	 * Sets whether auto-solve is enabled, which it is by default.
 	 * Auto-solve will automatically re-solve for all variables every time something is updated.
@@ -43,6 +46,16 @@ public class Solver {
 		
 		//Convert the list of constraints to matrix representation.
 		Matrix matrix = getMatrix();
+		
+		//Convert the matrix to reduced row echelon form.
+		matrix.rref();
+		
+		//Throw an error if the matrix is over-constrained.
+		if(errorOnOverConstrained && matrix.isOverConstrained()) {
+			throw new IllegalStateException(
+					"Solver is over-constrained and no solutions exist.");
+		}
+		
 		//Solve for all variables in the matrix.
 		double[] vars = matrix.solve();
 		
@@ -50,6 +63,31 @@ public class Solver {
 		for(int i = 0; i < var.size(); i++) {
 			var.get(i).updateValue(vars[i]);
 		}
+	}
+	
+	/**
+	 * @return whether this solver is over-constrained such that no solutions exist.
+	 */
+	public boolean isOverConstrained() {
+		Matrix matrix = getMatrix();
+		matrix.rref();
+		return matrix.isOverConstrained();
+	}
+	
+	/**
+	 * @return whether this solver is under-constrained such that multiple solutions exist.
+	 */
+	public boolean isUnderConstrained() {
+		Matrix matrix = getMatrix();
+		matrix.rref();
+		return matrix.isUnderConstrained();
+	}
+	
+	/**
+	 * @param error whether an exception is thrown if the solver is over-constrained.
+	 */
+	public void setErrorOnOverConstrained(boolean error) {
+		errorOnOverConstrained = error;
 	}
 	
 	/**
