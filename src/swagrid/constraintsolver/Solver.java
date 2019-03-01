@@ -43,8 +43,6 @@ public class Solver {
 		
 		//Convert the list of constraints to matrix representation.
 		Matrix matrix = getMatrix();
-		//Convert matrix to reduced row echelon form.
-		matrix.rref();
 		//Solve for all variables in the matrix.
 		double[] vars = matrix.solve();
 		
