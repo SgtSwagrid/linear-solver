@@ -34,7 +34,7 @@ public class Variable {
 	private Consumer<Double> updateFunction;
 	
 	/**
-	 * Construct a new Variable object of the given Solver.
+	 * Construct a new Variable object under the given Solver.
 	 * @param solver the Solver to which this variable belongs.
 	 */
 	public Variable(Solver solver) {
@@ -42,7 +42,7 @@ public class Variable {
 	}
 	
 	/**
-	 * Construct a new Variable object of the given Solver and name.
+	 * Construct a new Variable object under the given Solver and name.
 	 * @param solver the Solver to which this variable belongs.
 	 * @param name human-recognizable name of this variable.
 	 */
@@ -51,7 +51,7 @@ public class Variable {
 	}
 	
 	/**
-	 * Construct a new Variable object of the given Solver, name and initial value.
+	 * Construct a new Variable object under the given Solver, name and initial value.
 	 * @param solver the Solver to which this variable belongs.
 	 * @param name human-recognizable name of this variable.
 	 * @param value the initial value assigned to this variable.
@@ -119,7 +119,7 @@ public class Variable {
 		if(lock == null) {
 			//Create a new lock constraint.
 			double value = this.value;
-			lock = new Constraint(solver).setVar(this, 1.0).setSum(value);
+			lock = Constraint.create(solver).var(this, 1.0).sum(value).build();
 		}
 		return this;
 	}

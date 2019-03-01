@@ -25,20 +25,6 @@ public class Solver {
 	private boolean errorOnOverConstrained = true;
 	
 	/**
-	 * Sets whether auto-solve is enabled, which it is by default.
-	 * Auto-solve will automatically re-solve for all variables every time something is updated.
-	 * Disable for performance-critical applications.
-	 * Without auto-solve, solve() must be called manually to update variables.
-	 * @param autoSolve whether auto-solve should be enabled.
-	 */
-	public void setAutoSolve(boolean autoSolve) { this.autoSolve = autoSolve; }
-	
-	/**
-	 * @return whether auto-solve is enabled.
-	 */
-	boolean isAutoSolveEnabled() { return autoSolve; }
-	
-	/**
 	 * Manually triggers the solving for all variables once.
 	 * This need not be called provided auto-solve is enabled.
 	 */
@@ -89,6 +75,20 @@ public class Solver {
 	public void setErrorOnOverConstrained(boolean error) {
 		errorOnOverConstrained = error;
 	}
+	
+	/**
+	 * Sets whether auto-solve is enabled, which it is by default.
+	 * Auto-solve will automatically re-solve for all variables every time something is updated.
+	 * Disable for performance-critical applications.
+	 * Without auto-solve, solve() must be called manually to update variables.
+	 * @param autoSolve whether auto-solve should be enabled.
+	 */
+	public void setAutoSolve(boolean autoSolve) { this.autoSolve = autoSolve; }
+	
+	/**
+	 * @return whether auto-solve is enabled.
+	 */
+	boolean isAutoSolveEnabled() { return autoSolve; }
 	
 	/**
 	 * Converts the set of constraints to matrix form.

@@ -29,65 +29,22 @@ public class Constraint {
 	private double sum = 0.0;
 	
 	/**
-	 * Construct a new Constraint object of the given Solver.
+	 * Construct a new Constraint object under the given Solver.
 	 * @param solver the solver to which this constraint belongs.
 	 */
-	public Constraint(Solver solver) {
+	private Constraint(Solver solver) {
 		this.solver = solver;
-		solver.getConstraints().add(this);
 	}
 	
 	/**
-	 * Adds a new variable to this constraint equation.
-	 * If the variable already exists, this method will ADD TO its coefficient.
-	 * @param var the variable for which to update the coefficient.
-	 * @param coefficient the amount to change the coefficient by.
-	 * @return this constraint instance.
+	 * Creates a new ConstraintBuilder under the given solver.
+	 * Make a subsequent call to build() to finish creating the constraint,
+	 * following calls to var() and sum() to set up the constraint equation.
+	 * @param solver the solver to which this constraint belongs.
+	 * @return a ConstraintBuilder for creating a new constraint.
 	 */
-	public Constraint addVar(Variable var, double coefficient) {
-		
-		if(!containsVariable(var)) {
-			//Create the variable if it doesn't exist.
-			addVar(var, coefficient);
-		} else {
-			//Add to its coefficient if it does.
-			terms.put(var, terms.get(var) + coefficient);
-		}
-		return this;
-	}
-	
-	/**
-	 * Adds a new variable to this constraint equation.
-	 * If the variable already exists, this method will REPLACE its coefficient.
-	 * @param var the variable for which to update the coefficient.
-	 * @param coefficient the new coefficient for the variable.
-	 * @return this constraint instance.
-	 */
-	public Constraint setVar(Variable var, double coefficient) {
-		terms.put(var, coefficient);
-		if(solver.isAutoSolveEnabled()) solver.solve();
-		return this;
-	}
-	
-	/**
-	 * Removes the given variable from this constraint equation.
-	 * Equivalent to setVariable(var, 0.0).
-	 * @param var the variable to be removed.
-	 * @return this constraint instance.
-	 */
-	public Constraint removeVar(Variable var) {
-		terms.remove(var);
-		return this;
-	}
-	
-	/**
-	 * @param sum the value to which the variables in this constraint are required to sum.
-	 * @return this constraint instance.
-	 */
-	public Constraint setSum(double sum) {
-		this.sum = sum;
-		if(solver.isAutoSolveEnabled()) solver.solve();
-		return this;
+	public static ConstraintBuilder create(Solver solver) {
+		return new ConstraintBuilder(solver);
 	}
 	
 	/**
@@ -135,5 +92,63 @@ public class Constraint {
 		//Add the sum constant to the string.
 		str = str.substring(0, str.length() - 3) + " = " + sum;
 		return str;
+	}
+	
+	/**
+	 * ConstraintBuilder type for use in creating a constraint.
+	 * Use var() and sum() to set up the constraint equation,
+	 * followed by build() to create the actual constraint.
+	 */
+	public static class ConstraintBuilder {
+		
+		/** The constraint in the process of being built. */
+		private Constraint constr;
+		
+		/**
+		 * Construct a new ConstraintBuilder object for
+		 * building a Constraint under the given solver.
+		 * @param solver solver to which the created constraint will belong.
+		 */
+		private ConstraintBuilder(Solver solver) {
+			constr = new Constraint(solver);
+		}
+		
+		/**
+		 * Add a new variable (v) to the constraint equation, with a particular coefficient (c).
+		 * Constraints are of the form c1v1 + c2v2 + ... + cnvn = x,
+		 * where c1 ... cn, x are constants and v1 ... vn are variables.
+		 * If the variable has already been added, its coefficient will be replaced.
+		 * @param var the variable to add to the equation (v).
+		 * @param coefficient the coefficient of the variable (c).
+		 * @return this ConstraintBuilder instance.
+		 */
+		public ConstraintBuilder var(Variable var, double coefficient) {
+			constr.terms.put(var, coefficient);
+			return this;
+		}
+		
+		/**
+		 * Set the value to which the variables must sum (x).
+		 * Constraints are of the form c1v1 + c2v2 + ... + cnvn = x,
+		 * where c1 ... cn, x are constants and v1 ... vn are variables.
+		 * @param sum the value to which the variables must sum (x).
+		 * @return this ConstraintBuilder instance.
+		 */
+		public ConstraintBuilder sum(double sum) {
+			constr.sum = sum;
+			return this;
+		}
+		
+		/**
+		 * Create a Constraint object from this ConstraintBuilder.
+		 * This must be called if the constraint is to take effect.
+		 * Will automatically update relevant variables if auto-solve is enabled.
+		 * @return the relevant Constraint object.
+		 */
+		public Constraint build() {
+			constr.solver.getConstraints().add(constr);
+			if(constr.solver.isAutoSolveEnabled()) constr.solver.solve();
+			return constr;
+		}
 	}
 }
