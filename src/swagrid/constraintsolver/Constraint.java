@@ -32,7 +32,7 @@ public class Constraint {
      * Construct a new Constraint object under the given Solver.
      * @param solver the solver to which this constraint belongs.
      */
-    private Constraint(Solver solver) {
+    protected Constraint(Solver solver) {
         this.solver = solver;
     }
     
