@@ -156,17 +156,23 @@ public class Variable {
     /**
      * Changes the value of this variable,
      * without attempting to re-solve for other variables.
+     * Will not trigger the update function.
      * Not intended for use in public API.
      * @param value the new value.
+     * @return whether the new value was different to the original.
      */
-    void updateValue(double value) {
-        
-        if(Math.abs(value - this.value) > TOLERANCE) {
-            //Update the value and trigger the update function.
-            this.value = value;
-            if(updateFunction != null) updateFunction.accept(value);
-        }
+    boolean updateValue(double value) {
+        //Determine whether the new value is different to the original.
+        boolean different = Math.abs(value - this.value) > TOLERANCE;
+        //Update the value.
+        this.value = value;
+        return different;
     }
+    
+    /**
+     * @return the update function associated with this variable.
+     */
+    Consumer<Double> getUpdateFunction() { return updateFunction; }
     
     @Override
     public String toString() { return name + " = " + value; }

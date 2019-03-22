@@ -1,7 +1,9 @@
 package swagrid.constraintsolver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Solver type for Swagrid's linear constraint solver.
@@ -45,10 +47,18 @@ public class Solver {
         //Solve for all variables in the matrix.
         double[] vars = matrix.solve();
         
+        //Set of variables whose value has been changed.
+        Set<Variable> changed = new HashSet<>();
+        
         //Update the values of all variables.
         for(int i = 0; i < var.size(); i++) {
-            var.get(i).updateValue(vars[i]);
+            if(var.get(i).updateValue(vars[i])) {
+                changed.add(var.get(i));
+            }
         }
+        
+        //Trigger the update function for each modified variable.
+        changed.forEach(v -> v.getUpdateFunction().accept(v.getValue()));
     }
     
     /**
