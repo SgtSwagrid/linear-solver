@@ -84,15 +84,16 @@ public class Variable {
      */
     public Variable setValue(double value) {
         
+         //Update the value.
+        double oldValue = this.value;
+        this.value = value;
+        
         //If the new value is different from the original.
-        if(Math.abs(value - this.value) > TOLERANCE) {
+        if(Math.abs(value - oldValue) > TOLERANCE) {
             
             //Remove the lock constraint if there was one.
             boolean locked = lock != null;
             unlock();
-            
-            //Update the value.
-            this.value = value;
             
             //Lock the value while the ConstraintSet is solved.
             lock();
