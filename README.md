@@ -1,2 +1,2 @@
 # constraintsolver
-Linear Constraint Solver
+Basic solver for systems of linear equations.
