@@ -11,11 +11,7 @@ package swagrid.constraintsolver;
 class Matrix {
     
     /** Tolerance for considering values to be equal. */
-<<<<<<< HEAD
     private static final double TOLERANCE = 0.000001;
-=======
-    private static final double TOLERANCE = 0.0000001;
->>>>>>> branch 'master' of https://github.com/SgtSwagrid/constraint-solver.git
     
     /** Array backing for this matrix. */
     private double[][] matrix;

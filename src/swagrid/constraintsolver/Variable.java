@@ -13,11 +13,7 @@ import java.util.function.Consumer;
 public class Variable {
     
     /** Tolerance for considering values to be equal. */
-<<<<<<< HEAD
     private static final double TOLERANCE = 0.000001;
-=======
-    private static final double TOLERANCE = 0.0000001;
->>>>>>> branch 'master' of https://github.com/SgtSwagrid/constraint-solver.git
     
     /** The total number of nameless variables created. */
     private static int varNum = 0;
