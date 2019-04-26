@@ -1,4 +1,4 @@
-package swagrid.constraintsolver;
+package swagsolver;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
