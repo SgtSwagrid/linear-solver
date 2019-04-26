@@ -1,4 +1,4 @@
-package swagsolver;
+package solver;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class Constraint {
         this.solver = solver;
     }
     
-    /**
+    /*
      * Creates a new ConstraintBuilder under the given solver.
      * Make a subsequent call to build() to finish creating the constraint,
      * following calls to var() and sum() to set up the constraint equation.

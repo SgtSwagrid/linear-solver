@@ -1,4 +1,4 @@
-package swagsolver;
+package solver;
 
 import java.util.ArrayList;
 import java.util.HashSet;

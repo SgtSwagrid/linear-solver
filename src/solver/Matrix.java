@@ -1,4 +1,4 @@
-package swagsolver;
+package solver;
 
 /**
  * Matrix type for Swagrid's linear constraint solver.
