@@ -1,4 +1,4 @@
-package solver;
+package solver_old;
 
 /**
  * Matrix type for Swagrid's linear constraint solver.
